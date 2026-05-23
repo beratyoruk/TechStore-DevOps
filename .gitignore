@@ -30,3 +30,6 @@ htmlcov/
 
 # Runtime artifacts
 *.pid
+
+# Local-only report (Word'e dönüştürülecek)
+RAPOR.md
