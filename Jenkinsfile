@@ -49,7 +49,7 @@ pipeline {
             post {
                 always {
                     junit 'test-results/unit-tests.xml'
-                    publishCoverage adapters: [coberturaAdapter('coverage.xml')]
+                    archiveArtifacts artifacts: 'coverage.xml,htmlcov/**', allowEmptyArchive: true
                 }
             }
         }
