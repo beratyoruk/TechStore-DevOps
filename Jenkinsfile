@@ -126,10 +126,11 @@ pipeline {
                     docker stop techstore-app 2>/dev/null || true
                     docker rm techstore-app 2>/dev/null || true
 
-                    # Yeni versiyonu başlat
+                    # Yeni versiyonu başlat (compose network'üne dahil et)
                     docker run -d \
                         --name techstore-app \
                         --restart unless-stopped \
+                        --network techstore-devops_techstore-net \
                         -p 5000:5000 \
                         ${DOCKER_HUB_USER}/${DOCKER_IMAGE}:latest
 
@@ -144,14 +145,14 @@ pipeline {
             steps {
                 sh '''
                     # /health endpoint kontrol
-                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health)
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://techstore-app:5000/health)
                     if [ "$STATUS" != "200" ]; then
                         echo "❌ Smoke test başarısız! HTTP: $STATUS"
                         exit 1
                     fi
 
                     # Ana sayfa kontrol
-                    STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/)
+                    STATUS2=$(curl -s -o /dev/null -w "%{http_code}" http://techstore-app:5000/)
                     if [ "$STATUS2" != "200" ]; then
                         echo "❌ Ana sayfa erişilemiyor! HTTP: $STATUS2"
                         exit 1
