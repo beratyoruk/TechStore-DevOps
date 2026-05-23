@@ -50,12 +50,13 @@ docker --version     # 20+
 git --version        # 2+
 ```
 
+> 📦 Hazır imaj: [`synexis/techstore-app`](https://hub.docker.com/r/synexis/techstore-app) — `docker pull synexis/techstore-app:latest`
+>
+> 📂 GitHub: [beratyoruk/TechStore-DevOps](https://github.com/beratyoruk/TechStore-DevOps)
+
 ### 1. Yerel Çalıştırma
 
 ```bash
-> 📦 Hazır imaj: [`synexis/techstore-app`](https://hub.docker.com/r/synexis/techstore-app) — `docker pull synexis/techstore-app:latest`
-> 📂 GitHub: [beratyoruk/TechStore-DevOps](https://github.com/beratyoruk/TechStore-DevOps)
-
 # Klonla
 git clone https://github.com/beratyoruk/TechStore-DevOps.git
 cd TechStore-DevOps
