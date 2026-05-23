@@ -6,7 +6,6 @@ pipeline {
         DOCKER_HUB_USER = 'synexis'          // Docker Hub kullanıcı adınız
         SONAR_HOST      = 'http://sonarqube:9000'
         SONAR_TOKEN     = credentials('sonar-token') // Jenkins Credentials'a ekleyin
-        SLACK_CHANNEL   = '#devops'
     }
 
     stages {
@@ -178,31 +177,27 @@ pipeline {
     post {
         success {
             echo "🎉 Pipeline başarıyla tamamlandı!"
-            slackSend(
-                channel: env.SLACK_CHANNEL,
-                color: 'good',
-                message: """
-✅ *TechStore Deploy Başarılı*
-• Branch: `${env.BRANCH_NAME}`
-• Build: `#${env.BUILD_NUMBER}`
-• Commit: `${env.GIT_COMMIT?.take(7)}`
-• URL: ${env.BUILD_URL}
+            withCredentials([string(credentialsId: 'slack-webhook', variable: 'WEBHOOK_URL')]) {
+                sh """
+                    curl -X POST -H 'Content-type: application/json' \\
+                      --data '{
+                        "text": "✅ *TechStore Deploy Başarılı*\\n• Branch: `${env.BRANCH_NAME ?: 'main'}`\\n• Build: `#${env.BUILD_NUMBER}`\\n• Commit: `${env.GIT_COMMIT?.take(7) ?: 'N/A'}`\\n• URL: ${env.BUILD_URL}"
+                      }' \\
+                      "\$WEBHOOK_URL"
                 """
-            )
+            }
         }
         failure {
             echo "❌ Pipeline başarısız!"
-            slackSend(
-                channel: env.SLACK_CHANNEL,
-                color: 'danger',
-                message: """
-❌ *TechStore Deploy Başarısız*
-• Branch: `${env.BRANCH_NAME}`
-• Build: `#${env.BUILD_NUMBER}`
-• Aşama: ${env.STAGE_NAME}
-• Detay: ${env.BUILD_URL}console
+            withCredentials([string(credentialsId: 'slack-webhook', variable: 'WEBHOOK_URL')]) {
+                sh """
+                    curl -X POST -H 'Content-type: application/json' \\
+                      --data '{
+                        "text": "❌ *TechStore Deploy Başarısız*\\n• Branch: `${env.BRANCH_NAME ?: 'main'}`\\n• Build: `#${env.BUILD_NUMBER}`\\n• Aşama: ${env.STAGE_NAME ?: 'unknown'}\\n• Detay: ${env.BUILD_URL}console"
+                      }' \\
+                      "\$WEBHOOK_URL"
                 """
-            )
+            }
         }
         always {
             // Eski imajları temizle (son 3'ü tut)
