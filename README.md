@@ -54,8 +54,8 @@ git --version        # 2+
 
 ```bash
 # Klonla
-git clone https://github.com/kullanici-adi/techstore.git
-cd techstore
+git clone https://github.com/beratyoruk/TechStore-DevOps.git
+cd TechStore-DevOps
 
 # Sanal ortam kur
 python3 -m venv venv
