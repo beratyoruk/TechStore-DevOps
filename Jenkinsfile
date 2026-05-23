@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE    = 'techstore-app'
         DOCKER_HUB_USER = 'synexis'          // Docker Hub kullanıcı adınız
-        SONAR_HOST      = 'http://localhost:9000'
+        SONAR_HOST      = 'http://sonarqube:9000'
         SONAR_TOKEN     = credentials('sonar-token') // Jenkins Credentials'a ekleyin
         SLACK_CHANNEL   = '#devops'
     }
